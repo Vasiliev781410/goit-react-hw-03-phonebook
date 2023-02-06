@@ -14,6 +14,23 @@ export class ContactBook extends Component {
   ],
   filter: '',};
 
+  componentDidMount(){
+    try {
+      const parsedContacts = JSON.parse(localStorage.getItem("contacts"));
+      if (parsedContacts){
+        this.setState({contacts: parsedContacts});              
+      }
+    }
+    catch (error){
+      alert("Parsing error from localStorage");    }    
+  };
+
+  componentDidUpdate(_,prevState){
+      if (prevState.contacts.length !== this.state.contacts.length) {
+        localStorage.setItem("contacts",JSON.stringify(this.state.contacts));
+      }
+  }
+  
   handleSubmit = ({name, number}, evt) => {   
     evt.preventDefault();    
     const indexContact = this.state.contacts.findIndex(contact => contact.name === name);
